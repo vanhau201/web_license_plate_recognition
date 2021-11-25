@@ -1,0 +1,773 @@
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .main {
+        margin: 0 40px;
+    }
+
+
+    .video {
+        width: 100%;
+
+    }
+
+    #video {
+        width: 100%;
+        height: 350px;
+    }
+
+    #btnLoadVideo,
+    #btnStartWebCam,
+    #btnStopWebCam {
+        cursor: pointer;
+        border: none;
+        padding: 4px 30px;
+        margin-right: 10px;
+        background-color: crimson;
+        color: white;
+        border-radius: 4px;
+        margin-bottom: 0.3rem;
+    }
+
+    .row {
+        margin-left: 0px;
+    }
+
+    .image img {
+        width: 100%;
+        height: 160px;
+        /* background-color: black; */
+    }
+
+    .group div {
+        margin: 0px 0 15px 20px;
+    }
+
+    /* .btnPredict {
+        text-align: center;
+    } */
+
+    #btnPredict {
+        width: 80%;
+        padding: 6px 0;
+        border: none;
+        background-color: rgb(16, 152, 43);
+        color: white;
+        border-radius: 5px;
+        outline: none;
+        cursor: pointer;
+        /* margin-top: 5px; */
+    }
+
+    #btnUpdate {
+        padding: 4px 20px;
+        border: none;
+        background-color: crimson;
+        color: white;
+        border-radius: 5px;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .btnRemove {
+        padding: 6px 8px;
+        border: none;
+        background-color: crimson;
+        color: white;
+        border-radius: 4px;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .btnRepair {
+        padding: 6px 8px;
+        border: none;
+        background-color: rgb(16, 152, 43);
+        color: white;
+        border-radius: 4px;
+        outline: none;
+        cursor: pointer;
+        margin-right: 5px;
+    }
+
+    #txtResult {
+        padding: 2px 5px;
+        border-radius: 5px;
+        width: 50%;
+    }
+
+    #txtConfidence {
+        /* padding: 2px 5px; */
+        /* border-radius: 5px;
+         */
+        border: none;
+        text-align: center;
+    }
+
+    /* .my-custom-scrollbar {
+        height: 600px;
+        overflow: auto;
+    } */
+
+    body {
+        --table-width: 100%;
+
+    }
+
+    tbody {
+        display: block;
+        max-height: 530px;
+        overflow: auto;
+    }
+
+
+    thead tr {
+        width: 98%;
+
+        /* display: table;
+        table-layout: fixed; */
+    }
+
+    thead {
+        background-color: rgb(52, 58, 64);
+    }
+
+    tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .table .thead-dark th {
+        background-color: rgb(52, 58, 64) !important;
+    }
+
+    #table img {
+        width: 90%;
+        height: auto;
+    }
+
+    #table td {
+        overflow: auto;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    #table {
+        font-size: 13px;
+    }
+
+    #selectType {
+        padding: 3px 0 3px 2px;
+        width: 50%;
+        border-radius: 5px;
+    }
+
+    #txtSearch {
+        margin-left: 5px;
+        width: 50%;
+        padding: 3px 0 3px 5px;
+        border-radius: 4px;
+    }
+
+    .div-search {
+        text-align: right;
+        margin: 0px 0 10px 0;
+    }
+
+    .displayMessage {
+        display: none;
+    }
+</style>
+
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="main">
+    <div class="row mt-3">
+        <div class="col-md-5">
+            <div>
+                <input id="fileVideo" type="file" style="display: none;">
+                <label id="btnLoadVideo" for="fileVideo">Load Video</label>
+                <button id="btnStartWebCam" onclick="startWebcam()">Start Webcam</button>
+                <button id="btnStopWebCam" onclick="stopWebcam()">Stop Webcam</button>
+
+            </div>
+
+            <div class="mt-2 video">
+                <div class="mb-3">
+                    <video id="video" controls preload="metadata" src=""></video>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 image">
+                        <img id="image_bienso"
+                            src="https://kubalubra.is/wp-content/uploads/2017/11/default-thumbnail.jpg" alt="">
+                        <div class="mt-1">
+                            <input id="txtConfidence" style="width: 100%;" type="text" disabled value="Confidence 0%">
+                        </div>
+                    </div>
+
+                    <div class="col-md-7 right">
+                        <div class="group">
+                            <div class="form-check form-check-inline">
+                                <input id="rdoCheckin" class="form-check-input check" type="radio" name="radio"
+                                    value="checkin" checked onclick="handleClick(this);">
+                                <label class="form-check-label" for="radio_file">Check in</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input id="rdoCheckout" class="form-check-input check" type="radio" name="radio"
+                                    value="checkout" onclick="handleClick(this);">
+                                <label class="form-check-label" for="radio_link">Check out</label>
+                            </div>
+
+                            <div>
+                                <select id="selectType">
+                                    <option value="daytime">Daytime</option>
+                                    <option value="evening">Evening</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input id="txtResult" type="text">
+                                <button id="btnUpdate">Update</button>
+                            </div>
+
+
+                            <div class="btnPredict">
+                                <form action="">
+                                    <button id="btnPredict">Ckeck In</button>
+                                </form>
+                                <span id="message" class="displayMessage"
+                                    style="color: red; font-style: italic;"></span>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-md-7">
+            <div class="div-search">
+                <label for="search">Search</label>
+
+                <input id="txtSearch" name='search' type="text" placeholder="Enter license plate number . . .">
+
+
+            </div>
+            <div id="mytable" class="my-custom-scrollbar">
+                <table id="table" class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr class="d-flex abc">
+                            <th class="col-1" scope="col"></th>
+                            <th class="col-2 text-center" scope="col">Image</th>
+                            <th class="col-2 text-center" scope="col">Result</th>
+                            <th class="col-1 text-center" scope="col">Status</th>
+                            <th class="col-3 text-center" scope="col">Time</th>
+                            <th class="col-3 text-center" scope="col">Function</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr class="d-flex">
+                            <td class="col-1">1</td>
+                            <td class="col-2">
+                                <img src="https://thuthuatnhanh.com/wp-content/uploads/2021/06/hinh-anh-xe-Satria.jpg"
+                                    alt="">
+                            </td>
+                            <td class="col-2">65B1-465789</td>
+                            <td class="col-1">False</td>
+                            <td class="col-3">2021-09-25T06:07:05.812817Z</td>
+                            <td class="col-3">
+                                <button id="btnRepair"><i class="fas fa-tools"></i> Repair</button>
+                                <button id="btnRemove"><i class="far fa-trash-alt"></i> Remove</button>
+                            </td>
+                        </tr> -->
+
+
+
+                    </tbody>
+                </table>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+
+
+    //  load video
+    var fileVideo = document.getElementById("fileVideo");
+    fileVideo.addEventListener("change", function (e) {
+        const video = document.getElementById("video");
+        video.src = URL.createObjectURL(e.target.files[0]);
+    }) // start webcam 
+    function startWebcam() {
+        const video = document.getElementById('video')
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({
+                video:
+                    true
+            }).then(stream => {
+                this.localStream = stream;
+                this.video.srcObject = stream;
+                this.video.play();
+            })
+        }
+
+    }
+
+    // stop webcam
+    function stopWebcam() {
+        const video = document.getElementById('video')
+        video.pause();
+        video.src = "";
+        video.srcObject = null;
+
+        // As per new API stop all streams
+        if (this.localStream) {
+            this.localStream.getTracks().forEach(track => track.stop());
+        }
+    }
+
+
+
+    // cut image
+    function capture() {
+        var img = new Image()
+        img.crossOrigin = 'Anonymous'
+        var canvas = document.createElement('canvas');
+        var video = document.getElementById('video');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        // for drawing the video element on the canvas
+
+        base64 = canvas.toDataURL();
+        base64 = base64.split("base64,")[1]
+        return base64
+    }
+    // check in, check out
+    function handleClick(myRadio) {
+
+        if (myRadio.value == 'checkin') {
+            // document.getElementById("rdoCheckin").checked = true;
+            document.getElementById('rdoCheckin').setAttribute('checked', 'checked');
+            document.getElementById("rdoCheckout").removeAttribute('checked');
+
+            // thay đổi button predict
+            document.getElementById('btnPredict').innerText = 'Check In'
+
+        }
+        else {
+
+            document.getElementById('rdoCheckout').setAttribute('checked', 'checked');
+            document.getElementById("rdoCheckin").removeAttribute('checked');
+            // thay đổi button predict
+            document.getElementById('btnPredict').innerText = 'Check Out'
+
+        }
+
+    }
+
+
+    // check in
+    function checkIn() {
+        var txtResult = document.getElementById("txtResult")
+        var txtConfidence = document.getElementById("txtConfidence")
+        var image_bienso = document.getElementById("image_bienso")
+        var bntUpdate = document.getElementById("btnUpdate")
+        var base64_img = capture()
+        // console.log(base64_img)
+        if (base64_img != undefined) {
+            var select = document.getElementById("selectType");
+            var val = select.value;
+            url = "http://127.0.0.1:8000/api/checkin/"
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({ "base64": base64_img, "type": val })
+            }).then((respone) => {
+                if (respone.status == 400) {
+                    message("Error Image !!!")
+                }
+                else {
+                    respone.json()
+                        .then(function (data) {
+                            console.log(data)
+                            txtResult.value = data['result']
+                            txtConfidence.value = "Confidence " + data['confidences'] + "%"
+                            image_bienso.src = data['image']
+                            bntUpdate.setAttribute("data-id", data['id'])
+
+                            getDataToday(true)
+                            // scroll_bottom()
+
+                        })
+                }
+            })
+
+        }
+    }
+    // check Out
+    function checkOut() {
+        var txtResult = document.getElementById("txtResult")
+        var txtConfidence = document.getElementById("txtConfidence")
+        var image_bienso = document.getElementById("image_bienso")
+        var bntUpdate = document.getElementById("btnUpdate")
+        var base64_img = capture()
+        // console.log(base64_img)
+        if (base64_img != undefined) {
+            var select = document.getElementById("selectType");
+            var val = select.value;
+            url = "http://127.0.0.1:8000/api/checkout/"
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({ "base64": base64_img, "type": val })
+            }).then((respone) => {
+                if (respone.status == 404) {
+                    message("Not In Database !!!")
+                    return respone.json().then(function (data) {
+
+                        txtResult.value = data['result']
+                        txtConfidence.value = "Confidence " + data['confidences'] + "%"
+                        image_bienso.src = "data:image/png;base64," + data['image']
+                        // bntUpdate.setAttribute("data-id", data['id'])
+
+                        getDataToday()
+                        message("Check Out Successful !!!")
+                        // scroll_bottom()
+                    })
+
+                }
+                else if (respone.status == 400) {
+                    message("Error Image !!!")
+                }
+                else if (respone.ok) {
+                    return respone.json().then(function (data) {
+
+
+                        txtResult.value = data['result']
+                        txtConfidence.value = "Confidence " + data['confidences'] + "%"
+                        image_bienso.src = "data:image/png;base64," + data['image']
+                        // bntUpdate.setAttribute("data-id", data['id'])
+
+                        getDataToday()
+                        // scroll_bottom()
+
+
+
+                    })
+                }
+
+            })
+
+
+        }
+    }
+
+
+    // onclick button predict
+    function predict() {
+        var btnPredict = document.getElementById("btnPredict");
+
+        btnPredict.addEventListener("click", function (e) {
+            e.preventDefault()
+            if (document.getElementById('rdoCheckin').checked) {
+                // call hàm checkin
+                checkIn()
+
+
+
+            }
+            else if (document.getElementById('rdoCheckout').checked) {
+                checkOut()
+            }
+
+
+        })
+    }
+    // call predict
+    predict()
+
+
+    // load data hôm nay
+    function getDataToday() {
+        data = ''
+        var url = 'http://127.0.0.1:8000/api/list_image_to_day/'
+        fetch(url)
+            .then((res) => res.json())
+            .then(function (data) {
+                dataToTable(data)
+                var txtSearch = document.getElementById('txtSearch')
+                txtSearch.addEventListener("input", function (e) {
+                    text = e.target.value
+                    console.log(text)
+                    var myDataToday = ''
+                    var stt = 1
+                    for (var i in data) {
+                        if (data[i]['result'].toLowerCase().indexOf(text.toLowerCase()) != -1) {
+                            day = data[i]['time_create'].split('T')[0]
+                            time = data[i]['time_create'].split('T')[1].split('Z')[0]
+                            if (data[i]['status'] == true) {
+                                status = 'Yes'
+                            }
+                            else {
+                                status = 'No'
+                            }
+                            myDataToday += '<tr class="d-flex">' +
+                                '   <td class="col-1">' + stt + '</td>' +
+                                '   <td class="col-2">' +
+                                '       <img src="' + data[i]['image'] + '"' +
+                                '        alt="">' +
+                                '    </td>' +
+                                '    <td class="col-2">' + data[i]['result'] + '</td>' +
+                                '    <td class="col-1">' + status + '</td>' +
+                                '    <td class="col-3">' + day + ' ' + time + '</td>' +
+                                '    <td class="col-3">' +
+                                '  <form action="">' +
+                                '          <button class="btnRepair" onclick="deleteRepair(' + data[i]['id'] + ',event)"><i class="fas fa-tools"></i> Repair</button>' +
+                                '          <button class="btnRemove" onclick="deleteImage(' + data[i]['id'] + ',event)"><i class="far fa-trash-alt"></i> Remove</button>' +
+                                '  </form>' +
+                                '     </td>' +
+                                ' </tr>';
+
+
+                            stt += 1
+
+                        }
+                    }
+                    document.querySelector("#table > tbody").innerHTML = myDataToday
+
+
+                })
+            })
+
+    }
+    getDataToday()
+
+
+    // cho dữ liệu vào table
+    function dataToTable(data) {
+        var txtSearch = document.getElementById('txtSearch')
+        if (txtSearch.value.length > 0) {
+            var myDataToday = ''
+            for (var i in data) {
+                if (data[i]['result'].toLowerCase().indexOf(txtSearch.value.toLowerCase()) != -1) {
+                    stt = parseInt(i) + 1
+                    day = data[i]['time_create'].split('T')[0]
+                    time = data[i]['time_create'].split('T')[1].split('Z')[0]
+                    if (data[i]['status'] == true) {
+                        status = 'Yes'
+                    }
+                    else {
+                        status = 'No'
+                    }
+
+                    myDataToday += '<tr class="d-flex">' +
+                        '   <td class="col-1">' + stt + '</td>' +
+                        '   <td class="col-2">' +
+                        '       <img src="' + data[i]['image'] + '"' +
+                        '        alt="">' +
+                        '    </td>' +
+                        '    <td class="col-2">' + data[i]['result'] + '</td>' +
+                        '    <td class="col-1">' + status + '</td>' +
+                        '    <td class="col-3">' + day + ' ' + time + '</td>' +
+                        '    <td class="col-3">' +
+                        '  <form action="">' +
+                        '          <button class="btnRepair" onclick="deleteRepair(' + data[i]['id'] + ',event)"><i class="fas fa-tools"></i> Repair</button>' +
+                        '          <button class="btnRemove" onclick="deleteImage(' + data[i]['id'] + ',event)"><i class="far fa-trash-alt"></i> Remove</button>' +
+                        '  </form>' +
+                        '     </td>' +
+                        ' </tr>';
+
+                }
+
+
+
+                document.querySelector("#table > tbody").innerHTML = myDataToday
+            }
+
+        }
+        else {
+            var myDataToday = ''
+            for (var i in data) {
+                stt = parseInt(i) + 1
+                day = data[i]['time_create'].split('T')[0]
+                time = data[i]['time_create'].split('T')[1].split('Z')[0]
+                if (data[i]['status'] == true) {
+                    status = 'Yes'
+                }
+                else {
+                    status = 'No'
+                }
+
+                myDataToday += '<tr class="d-flex">' +
+                    '   <td class="col-1">' + stt + '</td>' +
+                    '   <td class="col-2">' +
+                    '       <img src="' + data[i]['image'] + '"' +
+                    '        alt="">' +
+                    '    </td>' +
+                    '    <td class="col-2">' + data[i]['result'] + '</td>' +
+                    '    <td class="col-1">' + status + '</td>' +
+                    '    <td class="col-3">' + day + ' ' + time + '</td>' +
+                    '    <td class="col-3">' +
+                    '  <form action="">' +
+                    '          <button class="btnRepair" onclick="deleteRepair(' + data[i]['id'] + ',event)"><i class="fas fa-tools"></i> Repair</button>' +
+                    '          <button class="btnRemove" onclick="deleteImage(' + data[i]['id'] + ',event)"><i class="far fa-trash-alt"></i> Remove</button>' +
+                    '  </form>' +
+                    '     </td>' +
+                    ' </tr>';
+
+            }
+
+
+
+            document.querySelector("#table > tbody").innerHTML = myDataToday
+        }
+
+    }
+
+    // delete
+    function deleteImage(id, e) {
+        // document.getElementById(id).preventDefault()
+        e.preventDefault()
+        url = `http://127.0.0.1:8000/api/delete/${id}/`
+        fetch(url, {
+            method: "DELETE",
+            headers: {
+                'Content-type': 'application/json',
+                // 'Accept': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+        }).then((res) => {
+            getDataToday()
+        })
+
+    }
+    // settimeout message
+    function timeOutMessage() {
+        setTimeout(function () {
+            document.getElementById("message").setAttribute("class", "displayMessage")
+        }, 3000);
+    }
+    function message(text) {
+        var mess = document.getElementById("message")
+        mess.textContent = text
+        mess.removeAttribute("class");
+        timeOutMessage()
+    }
+
+    // repair
+    function deleteRepair(id, e) {
+        e.preventDefault()
+    }
+
+
+    // auto scroll bottom
+    function scroll_bottom() {
+        var myDiv = document.getElementById("mytable");
+        myDiv.scrollTop = myDiv.scrollHeight;
+    }
+
+    // update Result
+    function updateCheckIn() {
+        document.getElementById("btnUpdate").addEventListener('click', function () {
+            var dataId = document.getElementById("btnUpdate");
+            id_image = dataId.getAttribute("data-id")
+            if (id_image != null) {
+                result = document.getElementById("txtResult").value
+                url = `http://127.0.0.1:8000/api/update_check_in/${id_image}/`
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        'Content-type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        "result": result,
+                    })
+                }).then(function (res) {
+                    getDataToday()
+                    message("Update Successful !!!")
+                })
+            }
+
+        })
+    }
+    updateCheckIn()
+
+    // update checkout
+    function updateCheckOut() {
+        document.getElementById("btnUpdate").addEventListener('click', function () {
+            if (document.getElementById('rdoCheckout').checked) {
+                result = document.getElementById("txtResult").value
+                url = "http://127.0.0.1:8000/api/update_check_out/"
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        'Content-type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        "result": result,
+                    })
+                }).then(function (res) {
+                    if (res.status == 404) {
+                        message("Not In Database !!!")
+                    }
+                    else {
+                        getDataToday()
+                        message("Check Out Successful !!!")
+                    }
+
+                })
+            }
+        })
+
+    }
+    updateCheckOut()
+
+
+</script>
+
+{% endblock content %}
