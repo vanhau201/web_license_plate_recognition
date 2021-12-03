@@ -1022,25 +1022,28 @@
     // update Result
     function updateCheckIn() {
         document.getElementById("btnUpdate").addEventListener('click', function () {
-            var dataId = document.getElementById("btnUpdate");
-            id_image = dataId.getAttribute("data-id")
-            if (id_image != null) {
-                result = document.getElementById("txtResult").value
-                url = domain + `/api/update_check_in/${id_image}/`
-                fetch(url, {
-                    method: "POST",
-                    headers: {
-                        'Content-type': 'application/json',
-                        'X-CSRFToken': csrftoken
-                    },
-                    body: JSON.stringify({
-                        "result": result,
+            if (document.getElementById('rdoCheckin').checked) {
+                var dataId = document.getElementById("btnUpdate");
+                id_image = dataId.getAttribute("data-id")
+                if (id_image != null) {
+                    result = document.getElementById("txtResult").value
+                    url = domain + `/api/update_check_in/${id_image}/`
+                    fetch(url, {
+                        method: "POST",
+                        headers: {
+                            'Content-type': 'application/json',
+                            'X-CSRFToken': csrftoken
+                        },
+                        body: JSON.stringify({
+                            "result": result,
+                        })
+                    }).then(function (res) {
+                        getDataToday(true)
+                        message("Update Successful !!!")
                     })
-                }).then(function (res) {
-                    getDataToday(true)
-                    message("Update Successful !!!")
-                })
+                }
             }
+
 
         })
     }
@@ -1083,6 +1086,8 @@
         })
 
     }
+
+
     updateCheckOut()
 
 
