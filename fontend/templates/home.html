@@ -571,17 +571,6 @@
             }).then((respone) => {
                 if (respone.status == 404) {
                     message("Not In Database !!!")
-                    return respone.json().then(function (data) {
-
-                        txtResult.value = data['result']
-                        txtConfidence.value = "Confidence " + data['confidences'] + "%"
-                        image_bienso.src = "data:image/png;base64," + data['image']
-                        // bntUpdate.setAttribute("data-id", data['id'])
-
-                        getDataToday(false)
-                        message("Check Out Successful !!!")
-
-                    })
 
                 }
                 else if (respone.status == 400) {
@@ -605,7 +594,7 @@
 
 
                         }
-                        // message("Check Out Image !!!")
+                        message("Check Out Successful !!!")
 
 
 
