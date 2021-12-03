@@ -497,6 +497,7 @@
 
     }
 
+    var domain = "http://127.0.0.1:8000"
 
     // check in
     function checkIn() {
@@ -509,7 +510,7 @@
         if (base64_img != undefined) {
             var select = document.getElementById("selectType");
             var val = select.value;
-            url = "http://127.0.0.1:8000/api/checkin/"
+            url = domain + "/api/checkin/"
             fetch(url, {
                 method: "POST",
                 headers: {
@@ -559,7 +560,7 @@
         if (base64_img != undefined) {
             var select = document.getElementById("selectType");
             var val = select.value;
-            url = "http://127.0.0.1:8000/api/checkout/"
+            url = domain + "/api/checkout/"
             fetch(url, {
                 method: "POST",
                 headers: {
@@ -646,7 +647,7 @@
     // load data hôm nay
     function getDataToday(flag) {
         data = ''
-        var url = 'http://127.0.0.1:8000/api/list_image_to_day/'
+        var url = domain + '/api/list_image_to_day/'
         fetch(url)
             .then((res) => res.json())
             .then(function (data) {
@@ -712,7 +713,7 @@
     // get data all
     function getDataAll(flag) {
         data = ''
-        var url = 'http://127.0.0.1:8000/api/list_image/'
+        var url = domain + '/api/list_image/'
         fetch(url)
             .then((res) => res.json())
             .then(function (data) {
@@ -881,7 +882,7 @@
     function deleteImage(id, e) {
         // document.getElementById(id).preventDefault()
         e.preventDefault()
-        url = `http://127.0.0.1:8000/api/delete/${id}/`
+        url = domain + `/api/delete/${id}/`
         fetch(url, {
             method: "DELETE",
             headers: {
@@ -927,7 +928,7 @@
     // opedn modal
     function repairImage(id, e) {
         e.preventDefault()
-        url = `http://127.0.0.1:8000/api/detail/${id}/`
+        url = domain + `/api/detail/${id}/`
         fetch(url)
             .then((res) => res.json())
             .then(function (data) {
@@ -976,7 +977,7 @@
             const status = document.getElementById("selectStatus").value
             const result = document.getElementById("txtResultRepair").value
             if (document.getElementById("txtResultRepair").value.length > 0) {
-                url = `http://127.0.0.1:8000/api/repair/${id}/`
+                url = domain + `/api/repair/${id}/`
                 fetch(url, {
                     method: "POST",
                     headers: {
@@ -1028,7 +1029,7 @@
             id_image = dataId.getAttribute("data-id")
             if (id_image != null) {
                 result = document.getElementById("txtResult").value
-                url = `http://127.0.0.1:8000/api/update_check_in/${id_image}/`
+                url = domain + `/api/update_check_in/${id_image}/`
                 fetch(url, {
                     method: "POST",
                     headers: {
@@ -1053,7 +1054,7 @@
         document.getElementById("btnUpdate").addEventListener('click', function () {
             if (document.getElementById('rdoCheckout').checked) {
                 result = document.getElementById("txtResult").value
-                url = "http://127.0.0.1:8000/api/update_check_out/"
+                url = domain + "/api/update_check_out/"
                 fetch(url, {
                     method: "POST",
                     headers: {
