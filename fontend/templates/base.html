@@ -16,10 +16,21 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     <title>{% block title %}Home{% endblock title %}</title>
 
 </head>
+<style>
+    .footer {
+        text-align: center;
+        background-color: rgb(52, 58, 64);
+        color: white;
+        padding-top: 20px;
+        padding-bottom: 8px;
+    }
+</style>
 
 <body>
     <div>
@@ -32,7 +43,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0 ml-5">
+                <ul class="navbar-nav mr-auto mt-2 ml-5 mt-lg-0">
                     <li class="nav-item {% if nav == 'home' %}active{% endif %}">
                         <a id="home" class="nav-link" href="{% url 'home' %}">Home <span class="sr-only"></span></a>
                     </li>
@@ -41,6 +52,18 @@
                     </li>
 
                 </ul>
+                <ul class="navbar-nav mt-2 mt-lg-0 ml-5 mr-4">
+                    <li class="nav-item mr-3">
+                        <i class="nav-link active">Hi, {{user.username}}</i>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"
+                                style="font-size: 14px;"></i>
+                            logout</a>
+                    </li>
+
+                </ul>
+
 
             </div>
         </nav>
@@ -49,6 +72,11 @@
     {% block content %}
 
     {% endblock content %}
+
+    <div class="footer">
+        <p>IUH - Industrial University of Ho Chi Minh City</p>
+    </div>
+
 </body>
 
 </html>

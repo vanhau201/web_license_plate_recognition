@@ -4,7 +4,9 @@
         padding: 0;
     }
 
-    .main {
+
+
+    .mainHome {
         margin: 0 40px;
     }
 
@@ -100,35 +102,32 @@
     }
 
     #txtConfidence {
-        /* padding: 2px 5px; */
-        /* border-radius: 5px;
-         */
+
         border: none;
         text-align: center;
     }
 
-    /* .my-custom-scrollbar {
-        height: 600px;
-        overflow: auto;
-    } */
+
 
     body {
         --table-width: 100%;
 
     }
 
-    tbody {
-        display: block;
+    /* #mytable {
         max-height: 530px;
         overflow: auto;
-    }
+    } */
 
+    #scroll_table {
+        display: block;
+        height: 530px;
+        overflow-y: auto;
+    }
 
     thead tr {
         width: 98%;
 
-        /* display: table;
-        table-layout: fixed; */
     }
 
     thead {
@@ -171,18 +170,50 @@
 
     #txtSearch {
         margin-left: 5px;
-        width: 50%;
+        width: 70%;
         padding: 3px 0 3px 5px;
         border-radius: 4px;
     }
 
+    #selectData {
+        padding: 3px 0 3px 2px;
+        width: 40%;
+        border-radius: 5px;
+    }
+
     .div-search {
-        text-align: right;
+        /* display: block; */
         margin: 0px 0 10px 0;
+        text-align: right;
     }
 
     .displayMessage {
         display: none;
+    }
+
+    .modal-dialog {
+        width: 80% !important;
+    }
+
+
+    #tableRepair input {
+        width: 100%;
+        padding: 3px 0 3px 4px;
+    }
+
+    #tableRepair select {
+        padding: 3px 5px 3px 4px;
+    }
+
+    #tableRepair td {
+        font-size: 13px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #tableRepair img {
+        width: 100%;
     }
 </style>
 
@@ -190,7 +221,7 @@
 {% block content %}
 
 
-<div class="main">
+<div class="mainHome">
     <div class="row mt-3">
         <div class="col-md-5">
             <div>
@@ -242,7 +273,7 @@
 
                             <div class="btnPredict">
                                 <form action="">
-                                    <button id="btnPredict">Ckeck In</button>
+                                    <button id="btnPredict">Check In</button>
                                 </form>
                                 <span id="message" class="displayMessage"
                                     style="color: red; font-style: italic;"></span>
@@ -258,13 +289,21 @@
 
 
         <div class="col-md-7">
-            <div class="div-search">
-                <label for="search">Search</label>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="">Data display</label>
+                    <select id="selectData">
+                        <option value="today">Today</option>
+                        <option value="all">All</option>
 
-                <input id="txtSearch" name='search' type="text" placeholder="Enter license plate number . . .">
-
-
+                    </select>
+                </div>
+                <div class="col-md-8 div-search">
+                    <label for="search">Search</label>
+                    <input id="txtSearch" name='search' type="text" placeholder="Enter license plate number . . .">
+                </div>
             </div>
+
             <div id="mytable" class="my-custom-scrollbar">
                 <table id="table" class="table table-bordered">
                     <thead class="thead-dark">
@@ -277,7 +316,7 @@
                             <th class="col-3 text-center" scope="col">Function</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="scroll_table">
                         <!-- <tr class="d-flex">
                             <td class="col-1">1</td>
                             <td class="col-2">
@@ -293,11 +332,8 @@
                             </td>
                         </tr> -->
 
-
-
                     </tbody>
                 </table>
-
 
             </div>
 
@@ -305,6 +341,64 @@
 
     </div>
 
+
+</div>
+
+<!-- modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 850px!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="tableRepair" class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr class="d-flex abc">
+                            <th class="col-1" scope="col"></th>
+                            <th class="col-2 text-center" scope="col">Image</th>
+                            <th class="col-2 text-center" scope="col">Result</th>
+                            <th class="col-2 text-center" scope="col">Status</th>
+                            <th class="col-2 text-center" scope="col">Confidence</th>
+                            <th class="col-3 text-center" scope="col">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr class="d-flex">
+                            <td class="col-1">1</td>
+                            <td class="col-2">
+                                <img src="https://kubalubra.is/wp-content/uploads/2017/11/default-thumbnail.jpg" alt="">
+                            </td>
+                            <td class="col-2">
+                                <input type="text" value="65B1-465789">
+                            </td>
+                            <td class="col-2">
+                                <select id="selectStatus">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </td>
+                            <td class="col-2">96%</td>
+                            <td class="col-3">2021-09-25T06:07:05.812817Z</td>
+                        </tr> -->
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <span id="messageRepair" class="displayMessage"
+                    style="color: red; font-style: italic; margin-right: 50%;"></span>
+                <form action="">
+                    <button id="btnSave" type="button" class="btn btn-primary">Save</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -325,6 +419,8 @@
         return cookieValue;
     }
     const csrftoken = getCookie('csrftoken');
+
+
 
 
 
@@ -361,7 +457,6 @@
             this.localStream.getTracks().forEach(track => track.stop());
         }
     }
-
 
 
     // cut image
@@ -429,20 +524,29 @@
                 else {
                     respone.json()
                         .then(function (data) {
-                            console.log(data)
+
                             txtResult.value = data['result']
                             txtConfidence.value = "Confidence " + data['confidences'] + "%"
                             image_bienso.src = data['image']
                             bntUpdate.setAttribute("data-id", data['id'])
 
-                            getDataToday(true)
-                            // scroll_bottom()
+                            if (document.getElementById("selectData").value == 'today') {
+                                getDataToday(true)
+
+                            }
+                            else {
+                                getDataAll(true)
+
+
+                            }
 
                         })
                 }
             })
 
+
         }
+
     }
     // check Out
     function checkOut() {
@@ -473,9 +577,9 @@
                         image_bienso.src = "data:image/png;base64," + data['image']
                         // bntUpdate.setAttribute("data-id", data['id'])
 
-                        getDataToday()
+                        getDataToday(false)
                         message("Check Out Successful !!!")
-                        // scroll_bottom()
+
                     })
 
                 }
@@ -489,10 +593,18 @@
                         txtResult.value = data['result']
                         txtConfidence.value = "Confidence " + data['confidences'] + "%"
                         image_bienso.src = "data:image/png;base64," + data['image']
-                        // bntUpdate.setAttribute("data-id", data['id'])
 
-                        getDataToday()
-                        // scroll_bottom()
+
+                        if (document.getElementById("selectData").value == 'today') {
+                            getDataToday(false)
+
+                        }
+                        else {
+                            getDataAll(false)
+
+
+                        }
+                        // message("Check Out Image !!!")
 
 
 
@@ -516,8 +628,6 @@
                 // call hàm checkin
                 checkIn()
 
-
-
             }
             else if (document.getElementById('rdoCheckout').checked) {
                 checkOut()
@@ -530,18 +640,26 @@
     predict()
 
 
+
+
+
     // load data hôm nay
-    function getDataToday() {
+    function getDataToday(flag) {
         data = ''
         var url = 'http://127.0.0.1:8000/api/list_image_to_day/'
         fetch(url)
             .then((res) => res.json())
             .then(function (data) {
-                dataToTable(data)
+                if (flag == false) {
+                    dataToTable(data, false)
+                }
+                else {
+                    dataToTable(data, true)
+                }
+
                 var txtSearch = document.getElementById('txtSearch')
                 txtSearch.addEventListener("input", function (e) {
                     text = e.target.value
-                    console.log(text)
                     var myDataToday = ''
                     var stt = 1
                     for (var i in data) {
@@ -565,7 +683,7 @@
                                 '    <td class="col-3">' + day + ' ' + time + '</td>' +
                                 '    <td class="col-3">' +
                                 '  <form action="">' +
-                                '          <button class="btnRepair" onclick="deleteRepair(' + data[i]['id'] + ',event)"><i class="fas fa-tools"></i> Repair</button>' +
+                                '          <button class="btnRepair" data-toggle="modal" data-target="#staticBackdrop" onclick="repairImage(' + data[i]['id'] + ',event)"><i class="fas fa-tools"></i> Repair</button>' +
                                 '          <button class="btnRemove" onclick="deleteImage(' + data[i]['id'] + ',event)"><i class="far fa-trash-alt"></i> Remove</button>' +
                                 '  </form>' +
                                 '     </td>' +
@@ -579,15 +697,100 @@
                     document.querySelector("#table > tbody").innerHTML = myDataToday
 
 
+
+
                 })
+
+
+            })
+
+
+    }
+    // getDataToday()
+
+
+    // get data all
+    function getDataAll(flag) {
+        data = ''
+        var url = 'http://127.0.0.1:8000/api/list_image/'
+        fetch(url)
+            .then((res) => res.json())
+            .then(function (data) {
+                if (flag == false) {
+                    dataToTable(data, false)
+                }
+                else {
+                    dataToTable(data, true)
+                }
+
+                var txtSearch = document.getElementById('txtSearch')
+                txtSearch.addEventListener("input", function (e) {
+                    text = e.target.value
+
+                    var myDataToday = ''
+                    var stt = 1
+                    for (var i in data) {
+                        if (data[i]['result'].toLowerCase().indexOf(text.toLowerCase()) != -1) {
+                            day = data[i]['time_create'].split('T')[0]
+                            time = data[i]['time_create'].split('T')[1].split('Z')[0]
+                            if (data[i]['status'] == true) {
+                                status = 'Yes'
+                            }
+                            else {
+                                status = 'No'
+                            }
+                            myDataToday += '<tr class="d-flex">' +
+                                '   <td class="col-1">' + stt + '</td>' +
+                                '   <td class="col-2">' +
+                                '       <img src="' + data[i]['image'] + '"' +
+                                '        alt="">' +
+                                '    </td>' +
+                                '    <td class="col-2">' + data[i]['result'] + '</td>' +
+                                '    <td class="col-1">' + status + '</td>' +
+                                '    <td class="col-3">' + day + ' ' + time + '</td>' +
+                                '    <td class="col-3">' +
+                                '  <form action="">' +
+                                '          <button class="btnRepair" data-toggle="modal" data-target="#staticBackdrop" onclick="repairImage(' + data[i]['id'] + ',event)"><i class="fas fa-tools"></i> Repair</button>' +
+                                '          <button class="btnRemove" onclick="deleteImage(' + data[i]['id'] + ',event)"><i class="far fa-trash-alt"></i> Remove</button>' +
+                                '  </form>' +
+                                '     </td>' +
+                                ' </tr>';
+
+
+                            stt += 1
+
+                        }
+                    }
+                    document.querySelector("#table > tbody").innerHTML = myDataToday
+
+
+
+                })
+
+
             })
 
     }
-    getDataToday()
+    getDataToday(false)
+
+    function selectDataTable() {
+        var selectData = document.getElementById("selectData")
+        selectData.addEventListener("change", function () {
+            if (selectData.value == 'today') {
+                getDataToday(false)
+
+            }
+            else {
+                getDataAll(false)
+
+            }
+        })
+    }
+    selectDataTable()
 
 
     // cho dữ liệu vào table
-    function dataToTable(data) {
+    function dataToTable(data, flag) {
         var txtSearch = document.getElementById('txtSearch')
         if (txtSearch.value.length > 0) {
             var myDataToday = ''
@@ -614,7 +817,7 @@
                         '    <td class="col-3">' + day + ' ' + time + '</td>' +
                         '    <td class="col-3">' +
                         '  <form action="">' +
-                        '          <button class="btnRepair" onclick="deleteRepair(' + data[i]['id'] + ',event)"><i class="fas fa-tools"></i> Repair</button>' +
+                        '          <button class="btnRepair" data-toggle="modal" data-target="#staticBackdrop" onclick="repairImage(' + data[i]['id'] + ',event)"><i class="fas fa-tools"></i> Repair</button>' +
                         '          <button class="btnRemove" onclick="deleteImage(' + data[i]['id'] + ',event)"><i class="far fa-trash-alt"></i> Remove</button>' +
                         '  </form>' +
                         '     </td>' +
@@ -622,10 +825,8 @@
 
                 }
 
-
-
-                document.querySelector("#table > tbody").innerHTML = myDataToday
             }
+            document.querySelector("#table > tbody").innerHTML = myDataToday
 
         }
         else {
@@ -640,7 +841,9 @@
                 else {
                     status = 'No'
                 }
-
+                var a = {
+                    b: "a"
+                }
                 myDataToday += '<tr class="d-flex">' +
                     '   <td class="col-1">' + stt + '</td>' +
                     '   <td class="col-2">' +
@@ -652,7 +855,7 @@
                     '    <td class="col-3">' + day + ' ' + time + '</td>' +
                     '    <td class="col-3">' +
                     '  <form action="">' +
-                    '          <button class="btnRepair" onclick="deleteRepair(' + data[i]['id'] + ',event)"><i class="fas fa-tools"></i> Repair</button>' +
+                    '          <button class="btnRepair" data-toggle="modal" data-target="#staticBackdrop" onclick="repairImage(' + data[i]['id'] + ',event)"><i class="fas fa-tools"></i> Repair</button>' +
                     '          <button class="btnRemove" onclick="deleteImage(' + data[i]['id'] + ',event)"><i class="far fa-trash-alt"></i> Remove</button>' +
                     '  </form>' +
                     '     </td>' +
@@ -664,6 +867,13 @@
 
             document.querySelector("#table > tbody").innerHTML = myDataToday
         }
+        if (flag == true) {
+            scroll_bottom()
+        }
+        else {
+            scroll_top()
+        }
+
 
     }
 
@@ -680,34 +890,136 @@
                 'X-CSRFToken': csrftoken
             },
         }).then((res) => {
-            getDataToday()
+            if (document.getElementById("selectData").value == 'today') {
+                getDataToday(false)
+
+            }
+            else {
+                getDataAll(false)
+
+
+            }
         })
 
     }
     // settimeout message
-    function timeOutMessage() {
-        setTimeout(function () {
-            document.getElementById("message").setAttribute("class", "displayMessage")
-        }, 3000);
-    }
+    // function timeOutMessage() {
+
+    // }
     function message(text) {
         var mess = document.getElementById("message")
         mess.textContent = text
         mess.removeAttribute("class");
-        timeOutMessage()
+        setTimeout(function () {
+            mess.setAttribute("class", "displayMessage")
+        }, 3000);
     }
 
-    // repair
-    function deleteRepair(id, e) {
+    function messageRepair(text) {
+        var mess = document.getElementById("messageRepair")
+        mess.textContent = text
+        mess.removeAttribute("class");
+        setTimeout(function () {
+            mess.setAttribute("class", "displayMessage")
+        }, 3000);
+    }
+
+    // opedn modal
+    function repairImage(id, e) {
         e.preventDefault()
+        url = `http://127.0.0.1:8000/api/detail/${id}/`
+        fetch(url)
+            .then((res) => res.json())
+            .then(function (data) {
+
+                var day = data['time_create'].split('T')[0]
+                var time = data['time_create'].split('T')[1].split('Z')[0]
+
+                if (data['status'] == true) {
+                    var options = '  <option value="true" selected>Yes</option>' +
+                        '  <option value="false">No</option>'
+
+                }
+                else {
+                    var options = '<option value="true">Yes</option>' +
+                        '<option value="false" selected>No</option>'
+                }
+
+                var tableRepair = '<tr class="d-flex">' +
+                    '          <td class="col-1">1</td>' +
+                    '          <td class="col-2">' +
+                    '              <img src="' + data['image'] + '" alt="">' +
+                    '          </td>' +
+                    '          <td class="col-2">' +
+                    '              <input id="txtResultRepair" type="text" value="' + data['result'] + '">' +
+                    '          </td>' +
+                    '          <td class="col-2">' +
+                    '                 <select id="selectStatus">'
+                    + options +
+                    '                 </select>' +
+                    '           </td>' +
+                    '           <td class="col-2">' + data['confidences'] + '%</td>' +
+                    '           <td class="col-3">' + day + ' ' + time + '</td>' +
+                    '         </tr>';
+
+                document.querySelector("#tableRepair > tbody").innerHTML = tableRepair
+                document.getElementById("btnSave").setAttribute("data-id", data['id'])
+
+            })
     }
 
+    // save repair
+    function saveRepair() {
+        const btnSave = document.getElementById("btnSave")
+        btnSave.addEventListener("click", function (e) {
+            const id = btnSave.getAttribute("data-id")
+            const status = document.getElementById("selectStatus").value
+            const result = document.getElementById("txtResultRepair").value
+            if (document.getElementById("txtResultRepair").value.length > 0) {
+                url = `http://127.0.0.1:8000/api/repair/${id}/`
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        'Content-type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        "result": result,
+                        "status": status
+                    })
+                }).then(function (res) {
+                    if (document.getElementById("selectData").value == 'today') {
+                        getDataToday(false)
+
+                    }
+                    else {
+                        getDataAll(false)
+
+
+                    }
+
+                    messageRepair("Repair Successful !!!")
+                })
+            }
+            else {
+                messageRepair("Result Are Not Empty !!!")
+            }
+
+        })
+    }
+    saveRepair()
 
     // auto scroll bottom
     function scroll_bottom() {
-        var myDiv = document.getElementById("mytable");
+        var myDiv = document.getElementById("scroll_table")
         myDiv.scrollTop = myDiv.scrollHeight;
     }
+    // auto scroll top
+    function scroll_top() {
+        var myDiv = document.getElementById("scroll_table")
+        myDiv.scrollTop = 0;
+    }
+
 
     // update Result
     function updateCheckIn() {
@@ -727,7 +1039,7 @@
                         "result": result,
                     })
                 }).then(function (res) {
-                    getDataToday()
+                    getDataToday(true)
                     message("Update Successful !!!")
                 })
             }
@@ -756,7 +1068,15 @@
                         message("Not In Database !!!")
                     }
                     else {
-                        getDataToday()
+                        if (document.getElementById("selectData").value == 'today') {
+                            getDataToday(false)
+
+                        }
+                        else {
+                            getDataAll(false)
+
+
+                        }
                         message("Check Out Successful !!!")
                     }
 
@@ -766,6 +1086,8 @@
 
     }
     updateCheckOut()
+
+
 
 
 </script>

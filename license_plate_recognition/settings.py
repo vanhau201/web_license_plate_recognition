@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-sz^rv2380pmb(wsei2lu@kem3qix+h(qnreookk1whs08i@gln'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -106,6 +106,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_PASSWORD_VALIDATORS = []
+
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': (
 #         'rest_framework.authentication.TokenAuthentication',
@@ -149,3 +151,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+LOGIN_URL = '/login'
+# LOGIN_REDIRECT_URL = '/home'

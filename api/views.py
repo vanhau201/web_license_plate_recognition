@@ -1,4 +1,5 @@
 from typing import final
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from rest_framework import serializers, status
 from rest_framework.decorators import api_view
@@ -32,15 +33,24 @@ def apiOverview(request):
 
 @api_view(["GET"])
 def listImage(request):
-    lists = Image.objects.all()
+    userID = request.user.id
+    lists = Image.objects.filter(user__id=userID)
     list_obj = ImageSerializer(lists, many=True, context={'request': request})
     return Response(list_obj.data)
 
 
 @api_view(["GET"])
+def detailImage(request, pk):
+    image_obj = Image.objects.get(id=pk)
+    serializer = ImageSerializer(image_obj, context={'request': request})
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
 def listImageToDay(request):
+    userID = request.user.id
     today = datetime.date.today()
-    lists = Image.objects.filter(time_create__year=today.year,
+    lists = Image.objects.filter(user__id=userID, time_create__year=today.year,
                                  time_create__month=today.month, time_create__day=today.day)
     list_obj = ImageSerializer(lists, many=True, context={'request': request})
     return Response(list_obj.data)
@@ -51,7 +61,6 @@ def checkIn(request):
     if request.method == "POST":
         img_base64 = request.data['base64']
         typeSelect = request.data['type']
-        print(typeSelect)
         lisencePlate_confidence = cat_bien_so(img_base64, net)
         if lisencePlate_confidence is not None:
             img = lisencePlate_confidence[0]
@@ -75,8 +84,10 @@ def checkIn(request):
                 image_name = str(uuid.uuid4())+".jpg"
                 # tao model
                 image = ContentFile(image_data, image_name)
+
+                user = User.objects.get(id=request.user.id)
                 Image(image=image, confidences=confidence, result=rs,
-                      time_create=datetime.datetime.now()).save()
+                      time_create=datetime.datetime.now(), user=user).save()
 
                 obj_last = Image.objects.last()
                 serializer_obj = ImageSerializer(
@@ -110,8 +121,8 @@ def checkOut(request):
                     "result": rs,
                     "confidences": confidence
                 }
-                image = Image.objects.filter(result=rs)
-
+                userID = request.user.id
+                image = Image.objects.filter(result=rs, user=userID)
                 if len(image) > 0:
                     for i in image:
                         data_dict = {
@@ -120,12 +131,16 @@ def checkOut(request):
                             "confidences": i.confidences,
                             "result": i.result,
                             "status": False,
-                            "time_create": i.time_create
+                            "time_create": i.time_create,
+                            "user": i.user.id
                         }
                         serializer = ImageSerializer(
                             instance=i, data=data_dict)
+
                         if serializer.is_valid():
                             serializer.save()
+                        else:
+                            return Response(final, status=status.HTTP_304_NOT_MODIFIED)
                 else:
                     return Response(final, status=status.HTTP_404_NOT_FOUND)
 
@@ -141,14 +156,15 @@ def deleteImage(request, pk):
 
 
 @api_view(['POST'])
-def updateCheckIn(request, pk):
+def repairImage(request, pk):
     image = Image.objects.get(id=pk)
     data_dict = {
         "image": image.image,
         "confidences": image.confidences,
         "result": request.data["result"],
-        "status": image.status,
-        "time_create": image.time_create
+        "status": request.data["status"],
+        "time_create": image.time_create,
+        "user": image.user.id
     }
     serializer = ImageSerializer(instance=image, data=data_dict)
     if serializer.is_valid():
@@ -159,9 +175,29 @@ def updateCheckIn(request, pk):
 
 
 @api_view(['POST'])
+def updateCheckIn(request, pk):
+    image = Image.objects.get(id=pk)
+    data_dict = {
+        "image": image.image,
+        "confidences": image.confidences,
+        "result": request.data["result"],
+        "status": image.status,
+        "time_create": image.time_create,
+        "user": image.user.id
+    }
+    serializer = ImageSerializer(instance=image, data=data_dict)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
 def updateCheckOut(request):
     number = request.data['result']
-    image = Image.objects.filter(result=number)
+    userID = request.user.id
+    image = Image.objects.filter(result=number, user=userID)
     if len(image) > 0:
         for i in image:
             data_dict = {
@@ -170,7 +206,8 @@ def updateCheckOut(request):
                 "confidences": i.confidences,
                 "result": i.result,
                 "status": False,
-                "time_create": i.time_create
+                "time_create": i.time_create,
+                "user": i.user.id
             }
             serializer = ImageSerializer(
                 instance=i, data=data_dict)
@@ -180,3 +217,39 @@ def updateCheckOut(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     return Response(status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def statistics(request):
+    userID = request.user.id
+    today = datetime.date.today()
+    today_obj = Image.objects.filter(user=userID, time_create__year=today.year,
+                                     time_create__month=today.month, time_create__day=today.day)
+    thisMonth = Image.objects.filter(user=userID, time_create__year=today.year,
+                                     time_create__month=today.month)
+    thisYear = Image.objects.filter(user=userID, time_create__year=today.year)
+
+    statusTrue = Image.objects.filter(user=userID, status=True)
+
+    data = {
+        "quantity_true": len(statusTrue),
+        "quantity_today": len(today_obj),
+        "quantity_month": len(thisMonth),
+        "quantity_year": len(thisYear),
+
+    }
+    years = {}
+    for i in [today.year, today.year-1, today.year-2]:
+        months = {}
+        for j in range(1, 13):
+            data_month = Image.objects.filter(user=userID, time_create__year=i,
+                                              time_create__month=j)
+            months[j] = len(data_month)
+
+        years[i] = months
+
+    statistics_dict = {
+        "data1": data,
+        "data2": years
+    }
+    return Response(statistics_dict)

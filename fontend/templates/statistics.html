@@ -1,6 +1,196 @@
 {% extends "base.html" %}
 {% block title %}Statistics{% endblock title %}
 {% block content %}
+<style>
+    .card {
+        background-color: rgb(88, 81, 80);
+        color: white;
+        margin-bottom: 10px;
+    }
 
-<h1>Thong ke</h1>
+
+
+    .card-body {
+        padding: 1rem;
+        ;
+    }
+
+    .card-title {
+        margin: 0;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+
+    #selectMonth {
+        padding: 3px 30px 3px 10px;
+    }
+</style>
+<div class="container">
+    <h4 class="mb-3 mt-3 ">Thống Kê Xe</h4>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <br>
+                    <h6 class="card-title">Xe Đang Gửi</h6>
+                    <br>
+                    <p class="card-text"><span id="quantityTrue">20</span> <i class="fas fa-motorcycle"></i></p>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <br>
+                    <h6 class="card-title">Xe Vào Gửi Hôm Nay</h6>
+                    <br>
+                    <p class="card-text"><span id="quantityToday">20</span> <i class="fas fa-motorcycle"></i></p>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <br>
+                    <h6 class="card-title">Xe Vào Gửi Của Tháng</h6>
+                    <br>
+                    <p class="card-text"><span id="quantityMonth">20</span> <i class="fas fa-motorcycle"></i></p>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <br>
+                    <h6 class="card-title">Xe Vào Gửi Của Năm</h6>
+                    <br>
+                    <p class="card-text"> <span id="quantityYear">20</span> <i class="fas fa-motorcycle"></i></p>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4 class="mb-3 mt-5 ">Thống Kê Số Lượng Xe Vào Gửi Mỗi Tháng Của 3 Năm Gần Đây</h4>
+    <label for="cars">Chọn năm:</label>
+    <select name="cars" id="selectMonth">
+        <!-- <option value="">1</option>
+        <option value="">1</option>
+        <option value="">1</option> -->
+    </select>
+    <div class="row mb-5">
+
+        <canvas id="barchart" width="" height=""></canvas>
+    </div>
+
+</div>
+<script>
+    var quantityTrue = document.getElementById("quantityTrue")
+    var quantityToday = document.getElementById("quantityToday")
+    var quantityMonth = document.getElementById("quantityMonth")
+    var quantityYear = document.getElementById("quantityYear")
+    var selectMonth = document.getElementById("selectMonth")
+
+    url = "http://127.0.0.1:8000/api/statistics/"
+    fetch(url).then((res) => res.json())
+        .then(function (data) {
+            quantityTrue.textContent = data['data1']['quantity_true']
+            quantityToday.textContent = data['data1']['quantity_today']
+            quantityMonth.textContent = data['data1']['quantity_month']
+            quantityYear.textContent = data['data1']['quantity_year']
+
+            years = Object.keys(data['data2']).reverse()
+            var options;
+            for (const i in years) {
+                options += '<option value="' + years[i] + '">' + years[i] + '</option>'
+            }
+            selectMonth.innerHTML = options
+
+            onChangeSelectMonth(data['data2'])
+
+
+        })
+
+
+
+
+    function onChangeSelectMonth(data) {
+        const dict_month = data[Object.keys(data).reverse()[0]]
+        const keys = Object.keys(dict_month)
+        const values = Object.values(dict_month)
+        chart(keys, values)
+        selectMonth.addEventListener("change", function () {
+            const dict_month = data[selectMonth.value]
+            const keys = Object.keys(dict_month)
+            const values = Object.values(dict_month)
+            chart(keys, values)
+
+        })
+    }
+
+
+
+
+
+
+
+    function chart(keys, values) {
+        new Chart(document.getElementById("barchart"), {
+            type: 'bar',
+            data: {
+                labels: keys,
+                datasets: [
+                    {
+                        // label: "Tổng tiền (VNĐ)",
+                        // backgroundColor: "#3e95cd",
+                        // data: [12, 19, 3, 17, 28, 24, 7, 2, 4, 14, 6],
+                        data: values,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(45, 159, 64, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(64, 205, 86, 1)',
+                            'rgba(12, 55, 192, 1)',
+                            'rgba(100, 45, 22, 1)',
+                            'rgba(77, 44, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: 'Thống Kê'
+
+                },
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Tháng'
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Số lượng'
+                        }
+                    }]
+                }
+            }
+        });
+    }
+
+</script>
 {% endblock content %}
