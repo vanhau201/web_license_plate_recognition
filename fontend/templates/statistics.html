@@ -26,15 +26,20 @@
     #selectMonth {
         padding: 3px 30px 3px 10px;
     }
+
+    p {
+        font-size: 18px;
+    }
 </style>
 <div class="container">
-    <h4 class="mb-3 mt-3 ">Thống Kê Xe</h4>
+    <!-- <h4 class="mb-3 mt-3 ">Thống Kê Xe</h4> -->
+    <br>
     <div class="row">
         <div class="col-sm-3">
             <div class="card text-center">
                 <div class="card-body">
                     <br>
-                    <h6 class="card-title">Xe Đang Gửi</h6>
+                    <h5 class="card-title">Number of motorbikes is sending</h5>
                     <br>
                     <p class="card-text"><span id="quantityTrue">0</span> <i class="fas fa-motorcycle"></i></p>
                     <br>
@@ -45,7 +50,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <br>
-                    <h6 class="card-title">Xe Vào Gửi Hôm Nay</h6>
+                    <h5 class="card-title">Number of motorbikes today</h5>
                     <br>
                     <p class="card-text"><span id="quantityToday">0</span> <i class="fas fa-motorcycle"></i></p>
                     <br>
@@ -56,7 +61,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <br>
-                    <h6 class="card-title">Xe Vào Gửi Của Tháng</h6>
+                    <h5 class="card-title">Number of motorbikes this month</h5>
                     <br>
                     <p class="card-text"><span id="quantityMonth">0</span> <i class="fas fa-motorcycle"></i></p>
                     <br>
@@ -67,7 +72,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <br>
-                    <h6 class="card-title">Xe Vào Gửi Của Năm</h6>
+                    <h5 class="card-title">Number of motorbikes in this year</h5>
                     <br>
                     <p class="card-text"> <span id="quantityYear">0</span> <i class="fas fa-motorcycle"></i></p>
                     <br>
@@ -75,7 +80,7 @@
             </div>
         </div>
     </div>
-    <h4 class="mb-3 mt-5 ">Thống Kê Số Lượng Xe Vào Gửi Mỗi Tháng Của 3 Năm Gần Đây</h4>
+    <h4 class="mb-3 mt-5 ">Statistics of number of motorcycles sent every month</h4>
     <label for="cars">Chọn năm:</label>
     <select name="cars" id="selectMonth">
         <!-- <option value="">1</option>
@@ -178,13 +183,13 @@
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Tháng'
+                            labelString: 'Months'
                         }
                     }],
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'Số lượng'
+                            labelString: 'Number of motorbikes'
                         }
                     }]
                 }

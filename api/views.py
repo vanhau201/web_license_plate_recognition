@@ -17,7 +17,8 @@ from django.core.files.base import ContentFile
 
 net = cv2.dnn.readNet('./models/yolov4-tiny.cfg',
                       './models/yolov4-tiny_3000.weights')
-model = tf.keras.models.load_model("./models/cnn_bienso.h5")
+model_chuso = tf.keras.models.load_model("./models/cnn_chuso_final.h5")
+model_chucai = tf.keras.models.load_model("./models/cnn_chucai_final.h5")
 
 
 @api_view(["GET"])
@@ -65,7 +66,7 @@ def checkIn(request):
         if lisencePlate_confidence is not None:
             img = lisencePlate_confidence[0]
             # print(img.shape)
-            # cv2.imshow("a",img)
+            # cv2.imshow("a", img)
             # cv2.imwrite('./media/image/'+str(uuid.uuid4())+".jpg",img)
             # cv2.waitKey(0)
             # cv2.destroyAllWindows()
@@ -77,7 +78,7 @@ def checkIn(request):
             if top_bot is not None:
                 top = top_bot[0]
                 bot = top_bot[1]
-                rs = predict_bienso(top, bot, model)
+                rs = predict_bienso(top, bot, model_chuso, model_chucai)
 
                 # luu anh base64 vao model
                 image_data = b64decode(img_to_base64(img))
@@ -115,7 +116,7 @@ def checkOut(request):
             if top_bot is not None:
                 top = top_bot[0]
                 bot = top_bot[1]
-                rs = predict_bienso(top, bot, model)
+                rs = predict_bienso(top, bot, model_chuso, model_chucai)
                 final = {
                     "image": img_to_base64(img),
                     "result": rs,

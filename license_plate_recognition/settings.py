@@ -82,8 +82,15 @@ WSGI_APPLICATION = 'license_plate_recognition.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dbcnm',
+        'USER': 'vanhau201',
+        'PASSWORD': '123456789',
+        'HOST': 'database-cnm.cpsli3xa7bor.ap-southeast-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
@@ -154,3 +161,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 LOGIN_URL = '/login'
 # LOGIN_REDIRECT_URL = '/home'
+
+
+# AWS S3 SETUP
+AWS_ACCESS_KEY_ID = 'AKIAVDLDBRWAYYO7UH33'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'image-cnm'
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

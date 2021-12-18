@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 
 
 def login(request):
+    username = ''
+    password = ''
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -20,10 +22,15 @@ def login(request):
         else:
             messages.warning(request, "Incorrect account or password")
 
-    return render(request, "login.html")
+    return render(request, "login.html", {
+        'username': username,
+        'password': password
+    })
 
 
 def register(request):
+    username = ''
+    email = ''
     if request.method == "POST":
         username = request.POST.get("username")
         email = request.POST.get("email")
@@ -50,8 +57,13 @@ def register(request):
                         userNew.save()
                         messages.success(
                             request, "Registered successfully")
+                        username = ''
+                        email = ''
 
-    return render(request, "register.html")
+    return render(request, "register.html", {
+        "username": username,
+        "email": email
+    })
 
 
 def logout(request):

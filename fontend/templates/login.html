@@ -135,11 +135,11 @@
                     {% csrf_token %}
                     <div>
                         <label for="">Username</label>
-                        <input type="text" name="username" id="">
+                        <input type="text" name="username" id="" value="{{username}}">
                     </div>
                     <div>
                         <label for="">Password</label>
-                        <input type="password" name="password" id="">
+                        <input type="password" name="password" id="" value="{{username}}">
                     </div>
                     <div>
                         {% if messages%}

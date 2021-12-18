@@ -432,16 +432,16 @@
     }) // start webcam 
     function startWebcam() {
         const video = document.getElementById('video')
-        if (navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({
-                video:
-                    true
-            }).then(stream => {
-                this.localStream = stream;
-                this.video.srcObject = stream;
-                this.video.play();
-            })
-        }
+
+        navigator.mediaDevices.getUserMedia({
+            video:
+                true
+        }).then(stream => {
+            this.localStream = stream;
+            this.video.srcObject = stream;
+            this.video.play();
+        })
+
 
     }
 
